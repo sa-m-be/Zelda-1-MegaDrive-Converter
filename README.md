@@ -1,13 +1,13 @@
-# Zelda Mega Drive Converter — v0.2
+# Zelda Mega Drive Converter
 
-I maintain this web converter for my unofficial native Mega Drive port of The Legend of Zelda. It accepts an original USA PRG0 iNES dump supplied by the user and generates the exact MD35 reference without a desktop installation, an intermediate Mega Drive ROM, or an external Mega Drive SDK.
+I maintain this web converter for my unofficial native Mega Drive port of The Legend of Zelda. It accepts an original USA PRG0 iNES dump supplied by the user and generates the exact reference port without a desktop installation, an intermediate Mega Drive ROM, or an external Mega Drive SDK.
 
 ## How to use
 
 1. Open the [web converter](https://sa-m-be.github.io/Zelda-1-MegaDrive-Converter/).
 2. Select an original USA PRG0 `.nes` file (131,088 bytes, including the 16-byte iNES header).
 3. Click **Generate Mega Drive ROM**. A recent browser and internet access are required to load the pinned Pyodide WebAssembly runtime from jsDelivr.
-4. When validation succeeds, click **Download MD35 (.bin)**. The output is a 2 MiB Mega Drive ROM.
+4. When validation succeeds, click **Download PORT**. The output is a 2 MiB Mega Drive ROM named `The Legend of Zelda - Mega Drive Port.bin`.
 
 The app processes ROM data in browser memory. It fetches the build bundle from this site and the runtime from jsDelivr; it does not intentionally send your ROM to a server. Unsupported revisions are rejected. The app is specific to this port, not a general-purpose NES converter.
 
@@ -22,7 +22,7 @@ The app processes ROM data in browser memory. It fetches the build bundle from t
 | Image | SHA-256 |
 |---|---|
 | NES USA PRG0 | `8f72dc2e98572eb4ba7c3a902bca5f69c448fc4391837e5f8f0d4556280440ac` |
-| MD35 | `dc4d6ffdcbca7156333c0b07cdd00a98977e733913a1174e9a636c205bf24a09` |
+| Mega Drive port (internal milestone MD35) | `dc4d6ffdcbca7156333c0b07cdd00a98977e733913a1174e9a636c205bf24a09` |
 
 ## Files and deployment
 
@@ -33,7 +33,7 @@ The app processes ROM data in browser memory. It fetches the build bundle from t
 
 All files belong in the same directory. GitHub Pages can serve them from the `main` branch root. No server-side ROM processing is required. To test locally using an HTTP server (optional for developers): `python3 -m http.server 8000` and open `http://localhost:8000/`.
 
-To reproduce the verified core build outside a browser, extract `build-bundle.zip`, and from its extracted directory run `python3 -c 'from build import build; from pathlib import Path; Path("MD35.bin").write_bytes(build(Path("/path/to/original.nes").read_bytes()))'`. Python 3.10+ is required only for this optional developer test.
+To reproduce the verified core build outside a browser, extract `build-bundle.zip`, and from its extracted directory run `python3 -c 'from build import build; from pathlib import Path; Path("The Legend of Zelda - Mega Drive Port.bin").write_bytes(build(Path("/path/to/original.nes").read_bytes()))'`. Python 3.10+ is required only for this optional developer test.
 
 ## Rights and distribution
 
