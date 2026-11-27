@@ -2,6 +2,10 @@
 
 I maintain this web converter for my unofficial native Mega Drive port of The Legend of Zelda. It accepts an original USA PRG0 iNES dump supplied by the user and generates the exact reference port without a desktop installation, an intermediate Mega Drive ROM, or an external Mega Drive SDK.
 
+[**Open the web converter**](https://sa-m-be.github.io/Zelda-1-MegaDrive-Converter/) · [Port project](https://github.com/sa-m-be/Zelda-1-MegaDrive-Port)
+
+The website is available in English and Brazilian Portuguese (EN / PT-BR).
+
 ## How to use
 
 1. Open the [web converter](https://sa-m-be.github.io/Zelda-1-MegaDrive-Converter/).
@@ -11,24 +15,51 @@ I maintain this web converter for my unofficial native Mega Drive port of The Le
 
 The app processes ROM data in browser memory. It fetches the build bundle from this site and the runtime from jsDelivr; it does not intentionally send your ROM to a server. Unsupported revisions are rejected. The app is specific to this port, not a general-purpose NES converter.
 
-## Build design and verification
+## Game controls
 
-- A fixed pre-linked native runtime from MD13, including port-specific routines and SDK code, is supplied as separate sparse segments, not as a complete working ROM.
-- The build reads the original PRG from the selected NES image, translates its instructions to 68000 assembly using the verified instruction catalogue, assembles the translated code and dispatch tables using a two-pass assembler, and generates VDP tile data. A fixed symbol-address layout preserves the reference binary layout.
-- 1,180,012 bytes of the MD13 image are regenerated, including the full original PRG, generated machine code and graphics. Nine revision overlays then produce MD35.
-- Desktop Python end-to-end reconstruction has been verified byte for byte against the reference. The WebAssembly browser integration is experimental: a full browser run could not be completed in the development environment because the CDN was unreachable.
-- The reference port was tested on a Japanese Mega Drive Model 1 with EverDrive V3 Pro. No additional physical-console test was performed for this web build.
+I mapped the NES controls to the standard Mega Drive three-button layout.
 
-| Image | SHA-256 |
-|---|---|
-| NES USA PRG0 | `8f72dc2e98572eb4ba7c3a902bca5f69c448fc4391837e5f8f0d4556280440ac` |
-| Mega Drive port (internal milestone MD35) | `dc4d6ffdcbca7156333c0b07cdd00a98977e733913a1174e9a636c205bf24a09` |
+| Mega Drive | NES | Function |
+| --- | --- | --- |
+| D-Pad | D-Pad | Move Link / navigate menus |
+| A | A | Sword / attack |
+| B | B | Use the equipped secondary item |
+| **C** | **SELECT** | Pause / resume gameplay; select where applicable |
+| START | START | Open / close inventory; confirm where applicable |
+
+**C is SELECT.** For more help, see the [port documentation](https://github.com/sa-m-be/Zelda-1-MegaDrive-Port).
+
+## Build and verification
+
+I developed this converter to generate my native Mega Drive / Genesis port directly from the original NES ROM.
+
+The conversion process includes:
+
+- Translation of MOS 6502 instructions to Motorola 68000 machine code using a two-pass assembler.
+- Conversion of NES graphics to the Mega Drive VDP format.
+- Integration of a pre-linked native runtime, including port-specific routines, SDK code, audio and controller support, with the generated code and data.
+- Application of port-specific corrections and SHA-256 integrity verification.
+
+All ROM generation runs locally in the browser. Neither the original NES ROM nor a complete Mega Drive ROM is included in the repository.
+
+### Compatibility and testing
+
+- I verified the reconstructed ROM byte for byte against my reference build using the desktop build engine and successfully tested conversion in a web browser.
+- I tested the reference port on an original Japanese Sega Mega Drive Model 1 (NTSC-J) using an EverDrive V3 Pro flash cartridge.
+- Broader browser and hardware compatibility testing remains ongoing. The browser-generated ROM has not been separately tested on physical hardware.
+
+### ROM checksums
+
+| ROM | SHA-256 |
+| --- | --- |
+| Original NES (USA PRG0) | `8f72dc2e98572eb4ba7c3a902bca5f69c448fc4391837e5f8f0d4556280440ac` |
+| Mega Drive Port | `dc4d6ffdcbca7156333c0b07cdd00a98977e733913a1174e9a636c205bf24a09` |
 
 ## Files and deployment
 
 - `index.html`: website and user interface.
 - `converter-worker.js`: background browser build, validation and runtime loader.
-- `build-bundle.zip`: source translator, assembler, build script, layout metadata, pre-linked runtime segments and revision overlays. Keep this ZIP intact on the website.
+- `build-bundle.zip`: source translator, assembler, build script, layout metadata, pre-linked runtime segments and port-specific corrections. Keep this ZIP intact on the website.
 - `README.md`: documentation.
 
 All files belong in the same directory. GitHub Pages can serve them from the `main` branch root. No server-side ROM processing is required. To test locally using an HTTP server (optional for developers): `python3 -m http.server 8000` and open `http://localhost:8000/`.
@@ -37,6 +68,6 @@ To reproduce the verified core build outside a browser, extract `build-bundle.zi
 
 ## Rights and distribution
 
-This unofficial project is not affiliated with Nintendo or Sega. The original game belongs to its rights holders. The bundle omits the complete NES and Mega Drive ROMs, but includes compiled port-specific code, SDK material, layout metadata and binary overlays. These may be subject to third-party rights and license obligations. Review the provenance and applicable licenses and obtain any required permission before publishing the build bundle. No new license is granted over third-party material.
+This unofficial project is not affiliated with Nintendo or Sega. The original game belongs to its rights holders. The bundle omits the complete NES and Mega Drive ROMs, but includes compiled port-specific code, SDK material, layout metadata and binary corrections. These may be subject to third-party rights and license obligations. Review the provenance and applicable licenses and obtain any required permission before publishing the build bundle. No new license is granted over third-party material.
 
 Maintainer: [sa-m-be](https://github.com/sa-m-be)
